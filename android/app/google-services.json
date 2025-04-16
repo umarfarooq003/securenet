@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1022663887295",
+    "project_id": "net-d8011",
+    "storage_bucket": "net-d8011.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1022663887295:android:b9d9a5f53ef6cd4b9d790a",
+        "android_client_info": {
+          "package_name": "com.example.securenet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGkKf8NGnFQV8JAWy2O-vsCE6oCyNsLMY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

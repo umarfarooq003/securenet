@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "com.example.securenet.app-debug-54:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "com.example.securenet.app-main-48:/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.example.securenet.app-debug-54:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "com.example.securenet.app-main-48:/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.example.securenet.app-debug-54:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "com.example.securenet.app-main-48:/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.example.securenet.app-debug-54:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "com.example.securenet.app-main-48:/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.example.securenet.app-debug-54:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "com.example.securenet.app-main-48:/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.example.securenet.app-debug-54:/drawable-v21_launch_background.xml.flat",
+        "source": "com.example.securenet.app-main-48:/drawable-v21/launch_background.xml"
+    }
+]

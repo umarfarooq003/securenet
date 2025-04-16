@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Graph</title>
+    <script src="https://unpkg.com/neovis.js@2.0.2"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            background-color: #f4f4f4;
+        }
+        #viz {
+            width: 100%;
+            height: 100%;
+            border: 1px solid #ccc;
+        }
+        #loadingMessage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            color: #666;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div id="loadingMessage">Loading graph, please wait...</div>
+<div id="viz"></div>
+
+<script>
+    // Set up the config for Neo4j visualization
+    const config = {
+        containerId: "viz", // The container to hold the graph
+        neo4j: {
+            serverUrl: "bolt://localhost:7687",  // Update with your Neo4j server URL
+            serverUser: "neo4j",                // Update with your Neo4j username
+            serverPassword: "1234567890"        // Update with your Neo4j password
+        },
+        labels: {
+            Device: {
+                caption: "name",
+                size: "size",  // Optional: Can specify a size property for nodes
+                community: "community"  // Optional: Can define a community property
+            },
+            Switch: {
+                caption: "name"
+            },
+            Server: {
+                caption: "name"
+            }
+        },
+        relationships: {
+            CONNECTED_TO: {
+                caption: true,
+                thickness: "weight",
+                color: "#3498db"  // Blue color for edges
+            }
+        },
+        initialCypher: "MATCH (n)-[r]->(m) RETURN n, r, m LIMIT 1000", // Customize Cypher query as needed
+        onLoading: function() {
+            document.getElementById("loadingMessage").style.display = "block"; // Show loading message while graph is loading
+        },
+        onRendered: function() {
+            document.getElementById("loadingMessage").style.display = "none"; // Hide loading message when rendering is done
+        },
+        cameraPosition: {
+            x: 0,
+            y: 0,
+            z: 500 // Adjust the initial zoom level
+        }
+    };
+
+    // Initialize the visualization
+    const viz = new Neovis.default(config);
+
+    // Render the graph
+    viz.render();
+
+    // Handle errors if the graph doesn't render correctly
+    viz.onError = function(error) {
+        document.getElementById("loadingMessage").innerHTML = `Error: ${error.message}`;
+    };
+</script>
+</body>
+</html>
