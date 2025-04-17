@@ -1,20 +1,22 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS  # 👈 Import CORS
 from neo4j import GraphDatabase
 
 app = Flask(__name__)
+CORS(app)  # 👈 Enable CORS for all origins (Allow from anywhere)
 
 # Neo4j Aura connection details
 NEO4J_URI = "neo4j+s://cb470ef4.databases.neo4j.io"
 NEO4J_USER = "neo4j"
-NEO4J_PASSWORD = "vuY_kLLF7XPaPK3memN6rkulymJht9bFNnUpHWmx97I"  # Replace with your actual password
+NEO4J_PASSWORD = "vuY_kLLF7XPaPK3memN6rkulymJht9bFNnUpHWmx97I"  # ⚠️ Replace with your actual password
 
 driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
 
 # Function to fetch graph data from Neo4j
 def fetch_graph_data():
     query = "MATCH (n)-[r]->(m) RETURN n, r, m"
-
     records_data = []
+
     with driver.session() as session:
         result = session.run(query)
         for record in result:
@@ -35,7 +37,7 @@ def handle_graph_data():
         # GET request: Fetch and return the graph data
         records_data = fetch_graph_data()
         return jsonify(records_data)
-    
+
     elif request.method == "POST":
         # POST request: Accept and process the data from the request
         data = request.get_json()
@@ -43,8 +45,7 @@ def handle_graph_data():
         if not data:
             return jsonify({"error": "No data provided"}), 400
         
-        # Process the data (you can implement your logic here)
-        # For example, if you're sending a custom query, execute it
+        # Use custom query if provided, otherwise default
         query = data.get("query", "MATCH (n)-[r]->(m) RETURN n, r, m")
 
         records_data = []
@@ -62,5 +63,5 @@ def handle_graph_data():
 
         return jsonify(records_data)
 
-if __name__ == "__main__":
+if __name__ == "_main_":
     app.run(debug=True)
