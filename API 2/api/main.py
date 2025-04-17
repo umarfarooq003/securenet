@@ -6,9 +6,9 @@ app = Flask(__name__)
 CORS(app)  # 👈 Enable CORS for all origins (Allow from anywhere)
 
 # Neo4j Aura connection details
-NEO4J_URI = "neo4j+s://cb470ef4.databases.neo4j.io"
-NEO4J_USER = "neo4j"
-NEO4J_PASSWORD = "vuY_kLLF7XPaPK3memN6rkulymJht9bFNnUpHWmx97I"  # ⚠️ Replace with your actual password
+NEO4J_URI = "*"
+NEO4J_USER = "*"
+NEO4J_PASSWORD = "*"  # ⚠️ Replace with your actual password
 
 driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
 
