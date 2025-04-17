@@ -1,24 +1,18 @@
-from fastapi import FastAPI
-from strawberry.fastapi import GraphQLRouter
-from fastapi.middleware.cors import CORSMiddleware
-from api.sch import schema
+from flask import Flask
+from strawberry.flask.views import GraphQLView
+from flask_cors import CORS
+from api.sch import schema  # adjust path as needed
 
-app = FastAPI()
+app = Flask(__name__)
 
-# CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+# Enable CORS for all domains, methods, and headers
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+
+# GraphQL endpoint
+app.add_url_rule(
+    "/graphql",
+    view_func=GraphQLView.as_view("graphql_view", schema=schema, graphiql=True),
 )
 
-# GraphQL
-graphql_app = GraphQLRouter(schema)
-app.include_router(graphql_app, prefix="/graphql")
-
-# Run locally
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    app.run(debug=True, host="0.0.0.0", port=8000)
