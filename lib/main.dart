@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'auth/login_screen.dart';
 
-
 final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
 
 void main() async {
@@ -11,12 +10,12 @@ void main() async {
   try {
     await Firebase.initializeApp(
       options: FirebaseOptions(
-        apiKey: "AIzaSyA-fusFmZnhjnihfIgFAAFEbsf5k5dNfug",
+        apiKey: "---------------------------------------------------",
         authDomain: "net-d8011.firebaseapp.com",
         projectId: "net-d8011",
         storageBucket: "net-d8011.firebasestorage.app",
         messagingSenderId: "1022663887295",
-        appId: "1:1022663887295:web:64b74049339480829d790a",
+        appId: "------------------------------------------------------",
         measurementId: "G-09R3LSRG3F",
       ),
     );
