@@ -6,7 +6,6 @@ import 'package:login/setting/auth_settings_screen.dart';
 import 'package:login/setting/backup_export_screen.dart';
 import 'package:login/setting/discovery_settings_screen.dart';
 import 'package:login/setting/neo4jsettingscreen.dart';
-import 'package:login/setting/refresh_settings_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   @override
@@ -41,14 +40,6 @@ class SettingsScreen extends StatelessWidget {
                         builder: (_) => Neo4jSettingsScreen())),
               ),
 
-              ListTile(
-                leading: Icon(Icons.refresh),
-                title: Text("Data Refresh Settings"),
-                onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => RefreshSettingsScreen())),
-              ),
 
               ListTile(
                 leading: Icon(Icons.network_check),

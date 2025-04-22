@@ -13,7 +13,7 @@ class _Neo4jForceGraphPageState extends State<Neo4jForceGraphPage> {
   bool isLoading = true;
   String? errorMsg;
   List<dynamic> graphData = [];
-  Map<String, String> nodeInfo = {}; // Node-specific tooltip data
+  Map<String, String> nodeInfo = {};
 
   @override
   void initState() {
@@ -39,13 +39,8 @@ class _Neo4jForceGraphPageState extends State<Neo4jForceGraphPage> {
           String? targetName = entry["m"]?["name"];
           String label = entry["r"] ?? '';
 
-          if (sourceName != null && sourceName.isNotEmpty) {
-            nodes.add(sourceName);
-          }
-
-          if (targetName != null && targetName.isNotEmpty) {
-            nodes.add(targetName);
-          }
+          if (sourceName != null && sourceName.isNotEmpty) nodes.add(sourceName);
+          if (targetName != null && targetName.isNotEmpty) nodes.add(targetName);
 
           if (sourceName != null &&
               targetName != null &&
@@ -59,8 +54,6 @@ class _Neo4jForceGraphPageState extends State<Neo4jForceGraphPage> {
           }
         }
 
-        debugPrint("Nodes fetched: ${nodes.toList()}");
-
         controller.graph.nodes.clear();
         controller.graph.edges.clear();
 
@@ -71,8 +64,6 @@ class _Neo4jForceGraphPageState extends State<Neo4jForceGraphPage> {
         for (var edge in edges) {
           controller.addEdgeByData(edge['source']!, edge['target']!);
         }
-
-
 
         setState(() {
           isLoading = false;
@@ -95,21 +86,15 @@ class _Neo4jForceGraphPageState extends State<Neo4jForceGraphPage> {
   Color getNodeColor(String nodeName, bool isSuspected) {
     final lower = nodeName.toLowerCase();
 
-    if (isSuspected) {
-      return Colors.red;
-    } else if (lower.contains("router")) {
-      return Colors.blue;
-    } else if (lower.contains("switch")) {
-      return Colors.green;
-    } else if (lower.contains("endpoint")) {
-      return Colors.orange;
-    } else if (lower.contains("server")) {
-      return Colors.grey;
-    } else if (lower.contains("loadbalancer") || lower.contains("load") && lower.contains("balancer")) {
-      return Colors.teal;
-    } else {
-      return Colors.purple;
-    }
+    if (isSuspected) return Colors.red;
+    if (lower.contains("router")) return Colors.blue;
+    if (lower.contains("switch")) return Colors.green;
+    if (lower.contains("endpoint")) return Colors.orange;
+    if (lower.contains("server")) return Colors.grey;
+    if (lower.contains("loadbalancer") ||
+        (lower.contains("load") && lower.contains("balancer"))) return Colors.teal;
+
+    return Colors.purple;
   }
 
   String getNodeInfo(Map<String, dynamic> node) {
@@ -122,113 +107,154 @@ class _Neo4jForceGraphPageState extends State<Neo4jForceGraphPage> {
     return info;
   }
 
+  Widget legendItem(String label, Color color) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 14,
+          height: 14,
+          margin: EdgeInsets.only(right: 6),
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+          ),
+        ),
+        Text(label, style: TextStyle(fontSize: 12)),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Neo4j Graph'),
         backgroundColor: Colors.indigo,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.refresh,color: Colors.white),
+            tooltip: "Refresh Graph",
+            onPressed: fetchGraphData,
+          ),
+        ],
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : errorMsg != null
           ? Center(child: Text(errorMsg!))
-          : ForceDirectedGraphWidget<String>(
-        controller: controller,
-        nodesBuilder: (context, nodeData) {
-          var selectedNode = graphData.firstWhere(
-                (element) =>
-            element["n"]?["name"] == nodeData ||
-                element["m"]?["name"] == nodeData,
-            orElse: () => null,
-          );
+          : Column(
+        children: [
+          // 🔝 Graph
+          Expanded(
+            child: ForceDirectedGraphWidget<String>(
+              controller: controller,
+              nodesBuilder: (context, nodeData) {
+                var selectedNode = graphData.firstWhere(
+                      (element) =>
+                  element["n"]?["name"] == nodeData ||
+                      element["m"]?["name"] == nodeData,
+                  orElse: () => null,
+                );
 
-          Map<String, dynamic> node = selectedNode?["n"]?["name"] == nodeData
-              ? selectedNode["n"]
-              : selectedNode?["m"];
+                Map<String, dynamic> node =
+                selectedNode?["n"]?["name"] == nodeData
+                    ? selectedNode["n"]
+                    : selectedNode?["m"];
 
-          if (node != null) {
-            bool isSuspected = node["suspected"] ?? false;
-            Color nodeColor = getNodeColor(nodeData, isSuspected);
-            bool isSelected = nodeInfo.containsKey(nodeData);
+                if (node != null) {
+                  bool isSuspected = node["suspected"] ?? false;
+                  Color nodeColor = getNodeColor(nodeData, isSuspected);
+                  bool isSelected = nodeInfo.containsKey(nodeData);
 
-            return GestureDetector(
-              onTap: () {
-                setState(() {
-                  nodeInfo.clear();
-                  nodeInfo[nodeData] = getNodeInfo(node);
-                });
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        nodeInfo.clear();
+                        nodeInfo[nodeData] = getNodeInfo(node);
+                      });
 
-                Future.delayed(Duration(seconds: 3), () {
-                  if (mounted) {
-                    setState(() {
-                      nodeInfo.remove(nodeData);
-                    });
-                  }
-                });
-              },
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (isSelected)
-                    Container(
-                      padding: EdgeInsets.all(6),
-                      margin: EdgeInsets.only(bottom: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: Colors.black54),
-                        borderRadius: BorderRadius.circular(6),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 4,
-                            offset: Offset(0, 2),
+                      Future.delayed(Duration(seconds: 3), () {
+                        if (mounted) {
+                          setState(() {
+                            nodeInfo.remove(nodeData);
+                          });
+                        }
+                      });
+                    },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (isSelected)
+                          Container(
+                            padding: EdgeInsets.all(6),
+                            margin: EdgeInsets.only(bottom: 4),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: Colors.black54),
+                              borderRadius: BorderRadius.circular(6),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 4,
+                                  offset: Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            constraints: BoxConstraints(maxWidth: 120),
+                            child: Text(
+                              nodeInfo[nodeData] ?? '',
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: Colors.black,
+                              ),
+                            ),
                           ),
-                        ],
-                      ),
-                      constraints: BoxConstraints(maxWidth: 120),
-                      child: Text(
-                        nodeInfo[nodeData] ?? '',
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: Colors.black,
+                        Container(
+                          width: 24,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            color: nodeColor,
+                            shape: BoxShape.circle,
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  Container(
-                    width: 24,
-                    height: 24,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: nodeColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Text(
-                      nodeData,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
+                  );
+                }
 
-          return Container(); // fallback if node not found
-        },
-        edgesBuilder: (context, a, b, distance) {
-          return Container(
-            width: distance > 10 ? distance : 10,
-            height: 2,
-            color: Colors.grey,
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: fetchGraphData,
-        child: Icon(Icons.refresh),
+                return Container();
+              },
+              edgesBuilder: (context, a, b, distance) {
+                return Container(
+                  width: distance > 10 ? distance : 10,
+                  height: 2,
+                  color: Colors.grey,
+                );
+              },
+            ),
+          ),
+
+          // 👇 Legend at the bottom
+          Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: 12.0, vertical: 10),
+            child: Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 20,
+              runSpacing: 10,
+              children: [
+                legendItem('Routers', Colors.blue),
+                legendItem('Switches', Colors.green),
+                legendItem('Endpoints', Colors.orange),
+                legendItem('Servers', Colors.grey),
+                legendItem('LoadBalancers', Colors.teal),
+                legendItem('Suspected', Colors.red),
+                legendItem('Others', Colors.purple),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

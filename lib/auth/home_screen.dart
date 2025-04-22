@@ -7,11 +7,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 // Screens
+import '../api.dart';
 import '../charts/charts.dart';
 import '../forcedirectedgraph/directedgraph.dart';
 import '../listscreen/listdeice.dart';
 import '../listscreen/server_list_page.dart';
 import '../listscreen/switch_list_page.dart';
+import '../nextsuspectednode/nextsuspectednode.dart';
 import '../settings_screen.dart';
 import 'login_screen.dart';
 
@@ -127,6 +129,16 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
+              leading: Icon(Icons.warning),
+              title: Text("Next Suspected Node"),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => RiskJsonPage()));
+              },
+            ),
+            ListTile(
               leading: Icon(Icons.computer),
               title: Text("List Device"),
               onTap: () {
@@ -162,6 +174,7 @@ class _HomePageState extends State<HomePage> {
                         builder: (context) => NetworkCharts()));
               },
             ),
+
             ListTile(
               leading: Icon(Icons.logout),
               title: Text("Logout"),
@@ -228,7 +241,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
       if (response.statusCode == 200) {
         final body = jsonDecode(response.body);
-        // Use the body directly if it is a List; otherwise, try to use body['data']
         final data = body is List ? body : (body['data'] ?? []);
 
         // Set to track processed IDs to avoid duplicates
@@ -265,28 +277,30 @@ class _HomeScreenState extends State<HomeScreen> {
                 .toString()
                 .toLowerCase();
 
-            // Safe count increment based on label
+            // Check if 'suspected' property is true and count accordingly
+            final isSuspected = node['suspected'] == true;
+
+            // Safe count increment based on label and 'suspected' flag
             if (label.contains('router')) {
               tempCounts['Routers'] = (tempCounts['Routers'] ?? 0) + 1;
+              if (isSuspected) tempCounts['Suspected'] = (tempCounts['Suspected'] ?? 0) + 1;
             } else if (label.contains('switch')) {
               tempCounts['Switches'] = (tempCounts['Switches'] ?? 0) + 1;
+              if (isSuspected) tempCounts['Suspected'] = (tempCounts['Suspected'] ?? 0) + 1;
             } else if (label.contains('server')) {
               tempCounts['Servers'] = (tempCounts['Servers'] ?? 0) + 1;
+              if (isSuspected) tempCounts['Suspected'] = (tempCounts['Suspected'] ?? 0) + 1;
             } else if (label.contains('endpoint') || label.contains('device')) {
-              tempCounts['End Points'] =
-                  (tempCounts['End Points'] ?? 0) + 1;
+              tempCounts['End Points'] = (tempCounts['End Points'] ?? 0) + 1;
+              if (isSuspected) tempCounts['Suspected'] = (tempCounts['Suspected'] ?? 0) + 1;
             } else if (label.contains('suspected')) {
-              tempCounts['Suspected'] =
-                  (tempCounts['Suspected'] ?? 0) + 1;
+              tempCounts['Suspected'] = (tempCounts['Suspected'] ?? 0) + 1;
             } else if (label.contains('infected')) {
-              tempCounts['Infected'] =
-                  (tempCounts['Infected'] ?? 0) + 1;
+              tempCounts['Infected'] = (tempCounts['Infected'] ?? 0) + 1;
             } else if (label.contains('recovered')) {
-              tempCounts['Recovered'] =
-                  (tempCounts['Recovered'] ?? 0) + 1;
+              tempCounts['Recovered'] = (tempCounts['Recovered'] ?? 0) + 1;
             } else if (label.contains('vulnerability')) {
-              tempCounts['Vulnerabilities'] =
-                  (tempCounts['Vulnerabilities'] ?? 0) + 1;
+              tempCounts['Vulnerabilities'] = (tempCounts['Vulnerabilities'] ?? 0) + 1;
             }
           }
         }
@@ -308,6 +322,7 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -341,7 +356,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 return _buildGridItem(
                     getIconForLabel(e.key),
                     e.key,
-                    e.value.toString());
+                    e.key == "Suspected" ? "${e.value} " : e.value.toString());
               }).toList(),
             ),
           ),
