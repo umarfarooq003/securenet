@@ -1,0 +1,4 @@
+What our app is doing
+Displays the virual LAN for the network despite of the physical LAN
+Shows the nodes whch are in danger when a node is compromised WRT network sciences and graohtheory
+Give simulatoons for network WRT different network settings which can be used for the effect which willoccue when network toplolgy is changes

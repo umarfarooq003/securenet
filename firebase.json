@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "detectome003",
     "public": "build/web",
     "ignore": [
       "firebase.json",

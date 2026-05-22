@@ -5,7 +5,8 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.7.2
+  sdk: ">=3.7.0 <4.0.0"
+
 
 dependencies:
   flutter:
@@ -13,6 +14,7 @@ dependencies:
   firebase_remote_config: ^5.4.2
   cloud_firestore: ^5.6.6
   provider: ^6.1.3
+  google_fonts: ^6.2.1
   image_picker: ^1.1.2
   shared_preferences: ^2.5.3
   firebase_storage: ^12.4.4
@@ -30,6 +32,9 @@ dependencies:
   flutter_local_notifications: ^19.1.0
   permission_handler: ^12.0.0+1
   fl_chart: ^0.63.0
+  flutter_json_view: ^1.1.5
+  image_picker_web: ^4.0.0
+  web_socket_channel: ^2.4.0
 
 
 
@@ -43,7 +48,7 @@ dev_dependencies:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/icons/vulnerability.png"  # Path to the image
+  image_path: "assets/icons/vulnerability.png"
 
 
 flutter:
@@ -56,6 +61,7 @@ flutter:
     - assets/images/nwa.jpg
     - assets/images/register.png
     - assets/html/graph.html
+    - assets/default_profile.png
 
   uses-material-design: true
 

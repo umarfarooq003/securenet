@@ -1,188 +1,184 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../widgets/shared_widgets.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
+  const ChangePasswordScreen({super.key});
   @override
-  _ChangePasswordScreenState createState() => _ChangePasswordScreenState();
+  State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
-  final TextEditingController _currentPasswordController = TextEditingController();
-  final TextEditingController _newPasswordController = TextEditingController();
+  final _currentCtrl = TextEditingController();
+  final _newCtrl     = TextEditingController();
+  final _formKey     = GlobalKey<FormState>();
+  bool _isLoading    = false;
+  bool _showCurrent  = false;
+  bool _showNew      = false;
 
-  bool _isLoading = false;
-  bool _showCurrentPassword = false;
-  bool _showNewPassword = false;
+  @override
+  void dispose() {
+    _currentCtrl.dispose();
+    _newCtrl.dispose();
+    super.dispose();
+  }
 
-  void _changePassword() async {
-    final currentPassword = _currentPasswordController.text.trim();
-    final newPassword = _newPasswordController.text.trim();
+  Future<void> _changePassword() async {
+    if (!_formKey.currentState!.validate()) return;
+    setState(() => _isLoading = true);
     final user = FirebaseAuth.instance.currentUser;
-
-    if (currentPassword.isEmpty || newPassword.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Please fill out all fields"),
-        backgroundColor: Colors.red,
-      ));
-      return;
-    }
-
-    setState(() {
-      _isLoading = true;
-    });
-
     try {
       final cred = EmailAuthProvider.credential(
         email: user!.email!,
-        password: currentPassword,
+        password: _currentCtrl.text.trim(),
       );
-
-      // Re-authenticate
       await user.reauthenticateWithCredential(cred);
-
-      // Update password
-      await user.updatePassword(newPassword);
-
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Password updated successfully"),
-        backgroundColor: Colors.green,
-      ));
-
-      _currentPasswordController.clear();
-      _newPasswordController.clear();
-    } on FirebaseAuthException catch (e) {
-      String message = "Failed to change password";
-
-      if (e.code == 'wrong-password') {
-        message = "Current password is incorrect";
-      } else if (e.code == 'weak-password') {
-        message = "New password is too weak (min 6 characters)";
+      await user.updatePassword(_newCtrl.text.trim());
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Password updated successfully.'),
+            backgroundColor: Color(0xFF10B981),
+          ),
+        );
+        _currentCtrl.clear();
+        _newCtrl.clear();
       }
-
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-      ));
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("An unexpected error occurred"),
-        backgroundColor: Colors.red,
-      ));
+    } on FirebaseAuthException catch (e) {
+      String msg = 'Failed to change password.';
+      if (e.code == 'wrong-password') msg = 'Current password is incorrect.';
+      if (e.code == 'weak-password') msg = 'New password is too weak (min. 6 characters).';
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(msg), backgroundColor: const Color(0xFFEF4444)),
+        );
+      }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('An unexpected error occurred.'),
+            backgroundColor: Color(0xFFEF4444),
+          ),
+        );
+      }
     } finally {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final inputFillColor = isDark ? Colors.grey.shade800 : Colors.grey.shade200;
-    final textColor = Theme.of(context).textTheme.bodyMedium?.color;
+    final scheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: Text("Change Password"),
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor ?? Colors.blueGrey,
-        elevation: 0,
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/images/forget password.png',
-                height: 200,
-              ),
-              SizedBox(height: 20),
+      appBar: AppBar(title: const Text('Change Password'), leading: const BackButton()),
+      body: GradientContainer(
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 480),
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(28, 36, 28, 28),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          // Icon header
+                          Container(
+                            width: 52,
+                            height: 52,
+                            decoration: BoxDecoration(
+                              color: scheme.primary.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            child: Icon(Icons.key_rounded, color: scheme.primary, size: 28),
+                          ),
+                          const SizedBox(height: 20),
+                          Text('Update your password',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall
+                                  ?.copyWith(fontWeight: FontWeight.w800)),
+                          const SizedBox(height: 6),
+                          Text(
+                            'Enter your current password, then choose a new one.',
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  color: scheme.onSurface.withOpacity(0.55),
+                                ),
+                          ),
+                          const SizedBox(height: 32),
 
-              Text(
-                "Change your password",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: textColor),
-              ),
-              SizedBox(height: 5),
+                          // Current password
+                          TextFormField(
+                            controller: _currentCtrl,
+                            obscureText: !_showCurrent,
+                            textInputAction: TextInputAction.next,
+                            decoration: InputDecoration(
+                              labelText: 'Current password',
+                              prefixIcon: const Icon(Icons.lock_outline_rounded),
+                              suffixIcon: IconButton(
+                                icon: Icon(_showCurrent
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined),
+                                onPressed: () => setState(() => _showCurrent = !_showCurrent),
+                              ),
+                            ),
+                            validator: (v) =>
+                                (v == null || v.isEmpty) ? 'Enter your current password' : null,
+                          ),
+                          const SizedBox(height: 16),
 
-              Text(
-                "Enter your current password and a new one to update.",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16, color: textColor?.withOpacity(0.7)),
-              ),
-              SizedBox(height: 25),
+                          // New password
+                          TextFormField(
+                            controller: _newCtrl,
+                            obscureText: !_showNew,
+                            textInputAction: TextInputAction.done,
+                            onFieldSubmitted: (_) => _changePassword(),
+                            decoration: InputDecoration(
+                              labelText: 'New password',
+                              prefixIcon: const Icon(Icons.lock_rounded),
+                              helperText: 'Minimum 6 characters',
+                              suffixIcon: IconButton(
+                                icon: Icon(_showNew
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined),
+                                onPressed: () => setState(() => _showNew = !_showNew),
+                              ),
+                            ),
+                            validator: (v) =>
+                                (v == null || v.length < 6)
+                                    ? 'Password must be at least 6 characters'
+                                    : null,
+                          ),
+                          const SizedBox(height: 28),
 
-              TextFormField(
-                controller: _currentPasswordController,
-                obscureText: !_showCurrentPassword,
-                decoration: InputDecoration(
-                  labelText: "Current Password",
-                  prefixIcon: Icon(Icons.lock_outline, color: Colors.blueGrey),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _showCurrentPassword ? Icons.visibility : Icons.visibility_off,
-                      color: Colors.blueGrey,
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 200),
+                            child: _isLoading
+                                ? const Center(
+                                    child: SizedBox(
+                                      height: 52,
+                                      child: Center(child: CircularProgressIndicator(strokeWidth: 2.5)),
+                                    ),
+                                  )
+                                : ElevatedButton(
+                                    key: const ValueKey('btn'),
+                                    onPressed: _changePassword,
+                                    child: const Text('Update Password'),
+                                  ),
+                          ),
+                        ],
+                      ),
                     ),
-                    onPressed: () {
-                      setState(() {
-                        _showCurrentPassword = !_showCurrentPassword;
-                      });
-                    },
                   ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  filled: true,
-                  fillColor: inputFillColor,
                 ),
               ),
-              SizedBox(height: 20),
-
-              TextFormField(
-                controller: _newPasswordController,
-                obscureText: !_showNewPassword,
-                decoration: InputDecoration(
-                  labelText: "New Password",
-                  prefixIcon: Icon(Icons.lock, color: Colors.blueGrey),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _showNewPassword ? Icons.visibility : Icons.visibility_off,
-                      color: Colors.blueGrey,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _showNewPassword = !_showNewPassword;
-                      });
-                    },
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  filled: true,
-                  fillColor: inputFillColor,
-                ),
-              ),
-              SizedBox(height: 20),
-
-              _isLoading
-                  ? CircularProgressIndicator()
-                  : ElevatedButton(
-                onPressed: _changePassword,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueGrey,
-                  padding: EdgeInsets.symmetric(vertical: 14, horizontal: 40),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  elevation: 5,
-                ),
-                child: Text(
-                  "Change Password",
-                  style: TextStyle(fontSize: 18, color: Colors.white),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),

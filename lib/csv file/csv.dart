@@ -1,11 +1,10 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import '../services/graphql_service.dart';
 
 class ExportCSVScreen extends StatefulWidget {
   @override
@@ -17,6 +16,7 @@ class _ExportCSVScreenState extends State<ExportCSVScreen> {
   List<Map<String, dynamic>>? data; // List to store all the data
   bool isLoading = true;
   String? error;
+  final GraphQLService _service = GraphQLService();
 
   @override
   void initState() {
@@ -44,7 +44,7 @@ class _ExportCSVScreenState extends State<ExportCSVScreen> {
   }
 
   Future<void> _initializeNotifications() async {
-    const androidSettings = AndroidInitializationSettings('app_icon');
+    const androidSettings = AndroidInitializationSettings('ic_launcher');
     const initializationSettings = InitializationSettings(
       android: androidSettings,
     );
@@ -67,15 +67,17 @@ class _ExportCSVScreenState extends State<ExportCSVScreen> {
   }
 
   Future<List<Map<String, dynamic>>> fetchDataFromAPI() async {
-    final apiUrl = 'https://new-folder-3-faeezusmani2002-gmailcom-faaezs-projects-373a7c11.vercel.app/graph';
-    final response = await http.get(Uri.parse(apiUrl));
-
-    if (response.statusCode == 200) {
-      final List<dynamic> rawData = jsonDecode(response.body);
-      return List<Map<String, dynamic>>.from(rawData);
-    } else {
-      throw Exception('Failed to load data from API');
-    }
+    final nodes = await _service.fetchNodes();
+    return nodes.map((node) {
+      return {
+        'nodeId': node['nodeId'] ?? '',
+        'nodeType': node['nodeType'] ?? '',
+        'name': node['name'] ?? '',
+        'ipAddress': node['ipAddress'] ?? '',
+        'status': node['status'] ?? '',
+        'allProperties': node['allProperties'] ?? '',
+      };
+    }).toList();
   }
 
   // Convert the data to CSV

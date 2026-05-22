@@ -1,0 +1,7 @@
+fastapi
+strawberry-graphql
+uvicorn
+neo4j
+flask
+flask-cors
+Levenshtein

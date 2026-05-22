@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'auth/login_screen.dart';
+import 'theme/app_theme.dart';
+
 
 final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
 
@@ -8,19 +10,21 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   try {
-    await Firebase.initializeApp(
-      options: FirebaseOptions(
-        apiKey: "---------------------------------------------------",
-        authDomain: "net-d8011.firebaseapp.com",
-        projectId: "net-d8011",
-        storageBucket: "net-d8011.firebasestorage.app",
-        messagingSenderId: "1022663887295",
-        appId: "------------------------------------------------------",
-        measurementId: "G-09R3LSRG3F",
-      ),
-    );
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp(
+        options: const FirebaseOptions(
+          apiKey: "AIzaSyA-fusFmZnhjnihfIgFAAFEbsf5k5dNfug",
+          authDomain: "net-d8011.firebaseapp.com",
+          projectId: "net-d8011",
+          storageBucket: "net-d8011.firebasestorage.app",
+          messagingSenderId: "1022663887295",
+          appId: "1:1022663887295:web:64b74049339480829d790a",
+          measurementId: "G-09R3LSRG3F",
+        ),
+      );
+    }
   } catch (e) {
-    print("Firebase initialization error: $e");
+    debugPrint("Firebase initialization error: $e");
   }
 
   runApp(MyApp());
@@ -39,9 +43,9 @@ class _MyAppState extends State<MyApp> {
       builder: (context, currentTheme, _) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'Flutter Auth',
-          theme: ThemeData.light(),
-          darkTheme: ThemeData.dark(),
+          title: 'Detectome',
+          theme: AppTheme.light(),
+          darkTheme: AppTheme.dark(),
           themeMode: currentTheme,
           home: LoginScreen(),
         );

@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+mesa
+pandas
+numpy
+networkx

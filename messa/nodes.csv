@@ -1,0 +1,648 @@
+nodeId,labels,properties
+0,[Endpoint],"{
+  name: Endpoint1,
+  AP: AP1,
+  ip: 192.168.10.1
+}"
+1,[Endpoint],"{
+  name: Endpoint2,
+  AP: AP1,
+  ip: 192.168.10.2
+}"
+2,[Endpoint],"{
+  name: Endpoint2,
+  AP: AP1,
+  ip: 192.168.10.2
+}"
+3,[Endpoint],"{
+  name: Endpoint4,
+  AP: AP1,
+  ip: 192.168.10.4
+}"
+4,[Endpoint],"{
+  name: Endpoint5,
+  AP: AP1,
+  ip: 192.168.10.5
+}"
+5,[Endpoint],"{
+  name: Endpoint6,
+  AP: AP1,
+  ip: 192.168.10.6
+}"
+6,[Endpoint],"{
+  name: Endpoint7,
+  AP: AP1,
+  ip: 192.168.10.7
+}"
+7,[Endpoint],"{
+  name: Endpoint8,
+  AP: AP1,
+  ip: 192.168.10.8
+}"
+8,[Endpoint],"{
+  name: Endpoint9,
+  AP: AP1,
+  ip: 192.168.10.9
+}"
+9,[Endpoint],"{
+  name: Endpoint10,
+  AP: AP1,
+  ip: 192.168.10.10
+}"
+10,[Endpoint],"{
+  name: Endpoint11,
+  AP: AP2,
+  ip: 192.168.10.11
+}"
+11,[Endpoint],"{
+  name: Endpoint12,
+  AP: AP2,
+  ip: 192.168.10.12
+}"
+12,[Endpoint],"{
+  name: Endpoint13,
+  AP: AP2,
+  ip: 192.168.10.13
+}"
+13,[Endpoint],"{
+  name: Endpoint14,
+  AP: AP2,
+  ip: 192.168.10.14
+}"
+14,[Endpoint],"{
+  name: Endpoint15,
+  AP: AP2,
+  ip: 192.168.10.15
+}"
+15,[Endpoint],"{
+  name: Endpoint16,
+  AP: AP2,
+  ip: 192.168.10.16
+}"
+16,[Endpoint],"{
+  name: Endpoint17,
+  AP: AP2,
+  ip: 192.168.10.17
+}"
+17,[Endpoint],"{
+  name: Endpoint18,
+  AP: AP2,
+  ip: 192.168.10.18
+}"
+18,[Endpoint],"{
+  name: Endpoint19,
+  AP: AP2,
+  ip: 192.168.10.19
+}"
+19,[Endpoint],"{
+  name: Endpoint20,
+  AP: AP2,
+  ip: 192.168.10.20
+}"
+20,[Endpoint],"{
+  name: Endpoint21,
+  AP: AP3,
+  ip: 192.168.10.21
+}"
+21,[Endpoint],"{
+  name: Endpoint22,
+  AP: AP3,
+  ip: 192.168.10.22
+}"
+22,[Endpoint],"{
+  name: Endpoint23,
+  AP: AP3,
+  ip: 192.168.10.23
+}"
+23,[Endpoint],"{
+  name: Endpoint24,
+  AP: AP3,
+  ip: 192.168.10.24
+}"
+24,[Endpoint],"{
+  name: Endpoint25,
+  AP: AP3,
+  ip: 192.168.10.25
+}"
+25,[Endpoint],"{
+  name: Endpoint26,
+  AP: AP3,
+  ip: 192.168.10.26
+}"
+26,[Endpoint],"{
+  name: Endpoint27,
+  AP: AP3,
+  ip: 192.168.10.27
+}"
+27,[Endpoint],"{
+  name: Endpoint28,
+  AP: AP3,
+  ip: 192.168.10.28
+}"
+28,[Endpoint],"{
+  name: Endpoint29,
+  AP: AP3,
+  ip: 192.168.10.29
+}"
+29,[Endpoint],"{
+  name: Endpoint30,
+  AP: AP3,
+  ip: 192.168.10.30
+}"
+30,[Endpoint],"{
+  name: Endpoint31,
+  AP: AP4,
+  ip: 192.168.10.31
+}"
+31,[Endpoint],"{
+  name: Endpoint32,
+  AP: AP4,
+  ip: 192.168.10.32
+}"
+32,[Endpoint],"{
+  name: Endpoint33,
+  AP: AP4,
+  ip: 192.168.10.33
+}"
+33,[Endpoint],"{
+  name: Endpoint34,
+  AP: AP4,
+  ip: 192.168.10.34
+}"
+34,[Endpoint],"{
+  name: Endpoint35,
+  AP: AP4,
+  ip: 192.168.10.35
+}"
+35,[Endpoint],"{
+  name: Endpoint36,
+  AP: AP4,
+  ip: 192.168.10.36
+}"
+36,[Endpoint],"{
+  name: Endpoint37,
+  AP: AP4,
+  ip: 192.168.10.37
+}"
+37,[Endpoint],"{
+  name: Endpoint38,
+  AP: AP4,
+  ip: 192.168.10.38
+}"
+38,[Endpoint],"{
+  name: Endpoint39,
+  AP: AP4,
+  ip: 192.168.10.39
+}"
+39,[Endpoint],"{
+  name: Endpoint40,
+  AP: AP4,
+  ip: 192.168.10.40
+}"
+40,[Endpoint],"{
+  name: Endpoint41,
+  AP: AP5,
+  ip: 192.168.10.41
+}"
+41,[Endpoint],"{
+  name: Endpoint42,
+  AP: AP5,
+  ip: 192.168.10.42
+}"
+42,[Endpoint],"{
+  name: Endpoint43,
+  AP: AP5,
+  ip: 192.168.10.43
+}"
+43,[Endpoint],"{
+  name: Endpoint44,
+  AP: AP5,
+  ip: 192.168.10.44
+}"
+44,[Endpoint],"{
+  name: Endpoint45,
+  AP: AP5,
+  ip: 192.168.10.45
+}"
+45,[Endpoint],"{
+  name: Endpoint46,
+  AP: AP5,
+  ip: 192.168.10.46
+}"
+46,[Endpoint],"{
+  name: Endpoint47,
+  AP: AP5,
+  ip: 192.168.10.47
+}"
+47,[Endpoint],"{
+  name: Endpoint48,
+  AP: AP5,
+  ip: 192.168.10.48
+}"
+48,[Endpoint],"{
+  name: Endpoint49,
+  AP: AP5,
+  ip: 192.168.10.49
+}"
+49,[Endpoint],"{
+  name: Endpoint50,
+  AP: AP5,
+  ip: 192.168.10.50
+}"
+50,[Endpoint],"{
+  name: Endpoint51,
+  AP: AP6,
+  ip: 192.168.10.51
+}"
+51,[Endpoint],"{
+  name: Endpoint52,
+  AP: AP6,
+  ip: 192.168.10.52
+}"
+52,[Endpoint],"{
+  name: Endpoint53,
+  AP: AP6,
+  ip: 192.168.10.53
+}"
+53,[Endpoint],"{
+  name: Endpoint54,
+  AP: AP6,
+  ip: 192.168.10.54
+}"
+54,[Endpoint],"{
+  name: Endpoint55,
+  AP: AP6,
+  ip: 192.168.10.55
+}"
+55,[Endpoint],"{
+  name: Endpoint56,
+  AP: AP6,
+  ip: 192.168.10.56
+}"
+56,[Endpoint],"{
+  name: Endpoint57,
+  AP: AP6,
+  ip: 192.168.10.57
+}"
+57,[Endpoint],"{
+  name: Endpoint58,
+  AP: AP6,
+  ip: 192.168.10.58
+}"
+58,[Endpoint],"{
+  name: Endpoint59,
+  AP: AP6,
+  ip: 192.168.10.59
+}"
+59,[Endpoint],"{
+  name: Endpoint60,
+  AP: AP6,
+  ip: 192.168.10.60
+}"
+60,[Endpoint],"{
+  name: Endpoint61,
+  AP: AP7,
+  ip: 192.168.10.61
+}"
+61,[Endpoint],"{
+  name: Endpoint62,
+  AP: AP7,
+  ip: 192.168.10.62
+}"
+62,[Endpoint],"{
+  name: Endpoint63,
+  AP: AP7,
+  ip: 192.168.10.63
+}"
+63,[Endpoint],"{
+  name: Endpoint64,
+  AP: AP7,
+  ip: 192.168.10.64
+}"
+64,[Endpoint],"{
+  name: Endpoint65,
+  AP: AP7,
+  ip: 192.168.10.65
+}"
+65,[Endpoint],"{
+  name: Endpoint66,
+  AP: AP7,
+  ip: 192.168.10.66
+}"
+66,[Endpoint],"{
+  name: Endpoint67,
+  AP: AP7,
+  ip: 192.168.10.67
+}"
+67,[Endpoint],"{
+  name: Endpoint68,
+  AP: AP7,
+  ip: 192.168.10.68
+}"
+68,[Endpoint],"{
+  name: Endpoint69,
+  AP: AP7,
+  ip: 192.168.10.69
+}"
+69,[Endpoint],"{
+  name: Endpoint70,
+  AP: AP7,
+  ip: 192.168.10.70
+}"
+70,[Endpoint],"{
+  name: Endpoint71,
+  AP: AP8,
+  ip: 192.168.10.71
+}"
+71,[Endpoint],"{
+  name: Endpoint72,
+  AP: AP8,
+  ip: 192.168.10.72
+}"
+72,[Endpoint],"{
+  name: Endpoint73,
+  AP: AP8,
+  ip: 192.168.10.73
+}"
+73,[Endpoint],"{
+  name: Endpoint74,
+  AP: AP8,
+  ip: 192.168.10.74
+}"
+74,[Endpoint],"{
+  name: Endpoint75,
+  AP: AP8,
+  ip: 192.168.10.75
+}"
+75,[Endpoint],"{
+  name: Endpoint76,
+  AP: AP8,
+  ip: 192.168.10.76
+}"
+76,[Endpoint],"{
+  name: Endpoint77,
+  AP: AP8,
+  ip: 192.168.10.77
+}"
+77,[Endpoint],"{
+  name: Endpoint78,
+  AP: AP8,
+  ip: 192.168.10.78
+}"
+78,[Endpoint],"{
+  name: Endpoint79,
+  AP: AP8,
+  ip: 192.168.10.79
+}"
+79,[Endpoint],"{
+  name: Endpoint80,
+  AP: AP8,
+  ip: 192.168.10.80
+}"
+80,[Endpoint],"{
+  name: Endpoint81,
+  AP: AP9,
+  ip: 192.168.10.81
+}"
+81,[Endpoint],"{
+  name: Endpoint82,
+  AP: AP9,
+  ip: 192.168.10.82
+}"
+82,[Endpoint],"{
+  name: Endpoint83,
+  AP: AP9,
+  ip: 192.168.10.83
+}"
+83,[Endpoint],"{
+  name: Endpoint84,
+  AP: AP9,
+  ip: 192.168.10.84
+}"
+84,[Endpoint],"{
+  name: Endpoint85,
+  AP: AP9,
+  ip: 192.168.10.85
+}"
+85,[Endpoint],"{
+  name: Endpoint86,
+  AP: AP9,
+  ip: 192.168.10.86
+}"
+86,[Endpoint],"{
+  name: Endpoint87,
+  AP: AP9,
+  ip: 192.168.10.87
+}"
+87,[Endpoint],"{
+  name: Endpoint88,
+  AP: AP9,
+  ip: 192.168.10.88
+}"
+88,[Endpoint],"{
+  name: Endpoint89,
+  AP: AP9,
+  ip: 192.168.10.89
+}"
+89,[Endpoint],"{
+  name: Endpoint90,
+  AP: AP9,
+  ip: 192.168.10.90
+}"
+90,[Endpoint],"{
+  name: Endpoint91,
+  AP: AP10,
+  ip: 192.168.10.91
+}"
+91,[Endpoint],"{
+  name: Endpoint92,
+  AP: AP10,
+  ip: 192.168.10.92
+}"
+92,[Endpoint],"{
+  name: Endpoint93,
+  AP: AP10,
+  ip: 192.168.10.93
+}"
+93,[Endpoint],"{
+  name: Endpoint94,
+  AP: AP10,
+  ip: 192.168.10.94
+}"
+94,[Endpoint],"{
+  name: Endpoint95,
+  AP: AP10,
+  ip: 192.168.10.95
+}"
+95,[Endpoint],"{
+  name: Endpoint96,
+  AP: AP10,
+  ip: 192.168.10.96
+}"
+96,[Endpoint],"{
+  name: Endpoint97,
+  AP: AP10,
+  ip: 192.168.10.97
+}"
+97,[Endpoint],"{
+  name: Endpoint98,
+  AP: AP10,
+  ip: 192.168.10.98
+}"
+98,[Endpoint],"{
+  name: Endpoint99,
+  AP: AP10,
+  ip: 192.168.10.99
+}"
+99,[Endpoint],"{
+  name: Endpoint100,
+  AP: AP10,
+  ip: 192.168.10.100
+}"
+100,[AccessPoint],"{
+  name: AP1,
+  ip: 10.0.1.1
+}"
+101,[AccessPoint],"{
+  name: AP2,
+  ip: 10.0.1.2
+}"
+102,[AccessPoint],"{
+  name: AP3,
+  ip: 10.0.1.3
+}"
+103,[AccessPoint],"{
+  name: AP4,
+  ip: 10.0.1.4
+}"
+104,[AccessPoint],"{
+  name: AP5,
+  ip: 10.0.1.5
+}"
+105,[AccessPoint],"{
+  name: AP6,
+  ip: 10.0.1.6
+}"
+106,[AccessPoint],"{
+  name: AP7,
+  ip: 10.0.1.7
+}"
+107,[AccessPoint],"{
+  name: AP8,
+  ip: 10.0.1.8
+}"
+108,[AccessPoint],"{
+  name: AP9,
+  ip: 10.0.1.9
+}"
+109,[AccessPoint],"{
+  name: AP10,
+  ip: 10.0.1.10
+}"
+110,[Router],"{
+  model: Cisco 2900,
+  status: active,
+  name: Router1,
+  ip: 10.0.0.1
+}"
+111,[Router],"{
+  model: Cisco 2900,
+  status: active,
+  name: Router2,
+  ip: 10.0.0.2
+}"
+112,[ISP],"{
+  status: active,
+  name: ISP1,
+  provider: PTCL Internet Services,
+  bandwidth: 1Gbps,
+  ip: 203.0.113.1
+}"
+113,[Server],"{
+  os: Ubuntu 22.04 LTS,
+  status: active,
+  name: Server1,
+  role: Web Server,
+  ip: 172.16.0.1
+}"
+114,[Server],"{
+  os: Ubuntu 22.04 LTS,
+  status: active,
+  name: Server2,
+  role: Database Server,
+  ip: 172.16.0.2
+}"
+115,[Server],"{
+  os: Ubuntu 22.04 LTS,
+  status: active,
+  name: Server3,
+  role: Mail Server,
+  ip: 172.16.0.3
+}"
+116,[Server],"{
+  os: Ubuntu 22.04 LTS,
+  status: active,
+  name: Server4,
+  role: File Server,
+  ip: 172.16.0.4
+}"
+117,[Server],"{
+  os: Ubuntu 22.04 LTS,
+  status: active,
+  name: Server5,
+  role: Backup Server,
+  ip: 172.16.0.5
+}"
+118,[Switch],"{
+  model: Cisco Catalyst 2960,
+  status: active,
+  name: Switch1,
+  ip: 10.0.10.1
+}"
+119,[Switch],"{
+  model: Cisco Catalyst 2960,
+  status: active,
+  name: Switch2,
+  ip: 10.0.10.2
+}"
+120,[Switch],"{
+  model: Cisco Catalyst 2960,
+  status: active,
+  name: Switch3,
+  ip: 10.0.10.3
+}"
+121,[Switch],"{
+  model: Cisco Catalyst 2960,
+  status: active,
+  name: Switch4,
+  ip: 10.0.10.4
+}"
+122,[AggregationSwitch],"{
+  model: Cisco Nexus 9300,
+  status: active,
+  name: AggSwitch1,
+  role: Core Aggregation Switch,
+  ip: 10.0.20.1
+}"
+123,[Switch],"{
+  model: Cisco Catalyst 9500,
+  status: active,
+  name: ServerSwitch1,
+  role: Server Switch,
+  ip: 10.0.30.1
+}"
+124,[AggregationSwitch],"{
+  model: Cisco Nexus 9300,
+  status: active,
+  name: AggSwitch2,
+  role: Core Aggregation Switch,
+  ip: 10.0.20.2
+}"
+128,[Firewall],"{
+  model: FortiGate 600E,
+  status: active,
+  vendor: Fortinet,
+  name: Firewall1,
+  role: Internal Firewall (Server Segment),
+  ip: 10.0.40.1
+}"

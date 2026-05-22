@@ -4,7 +4,7 @@
             "outputFile": "com.example.securenet.app-mergeDebugResources-52:/values-watch-v20/values-watch-v20.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Dell\\.gradle\\caches\\8.10.2\\transforms\\de83e696a679eb73f2df09ba875d3983\\transformed\\jetified-play-services-auth-20.7.0\\res\\values-watch-v20\\values.xml",
+                    "source": "C:\\Users\\umarfarooq\\.gradle\\caches\\8.10.2\\transforms\\de83e696a679eb73f2df09ba875d3983\\transformed\\jetified-play-services-auth-20.7.0\\res\\values-watch-v20\\values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11",
                         "startColumns": "0,0,0,0,0,0,0,0",
@@ -21,7 +21,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Dell\\.gradle\\caches\\8.10.2\\transforms\\86c3fad8424f4d8b168be64fc6b53ae4\\transformed\\appcompat-1.1.0\\res\\values-watch-v20\\values-watch-v20.xml",
+                    "source": "C:\\Users\\umarfarooq\\.gradle\\caches\\8.10.2\\transforms\\86c3fad8424f4d8b168be64fc6b53ae4\\transformed\\appcompat-1.1.0\\res\\values-watch-v20\\values-watch-v20.xml",
                     "from": {
                         "startLines": "2,5,8",
                         "startColumns": "4,4,4",

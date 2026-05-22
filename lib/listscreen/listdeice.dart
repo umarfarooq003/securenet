@@ -1,124 +1,212 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import '../services/graphql_service.dart';
+import '../widgets/shared_widgets.dart';
+import '../theme/app_theme.dart';
 
-class Device {
+class Node {
+  final String nodeId;
+  final String nodeType;
   final String name;
   final String ip;
-  final String mac;
+  final String status;
+  final dynamic allProperties;
 
-  Device({required this.name, required this.ip, required this.mac});
+  const Node({
+    required this.nodeId,
+    required this.nodeType,
+    required this.name,
+    required this.ip,
+    required this.status,
+    required this.allProperties,
+  });
 
-  factory Device.fromJson(Map<String, dynamic> json) {
-    return Device(
-      name: json['name'],
-      ip: json['ipAddress'],
-      mac: json['macAddress'],
-    );
-  }
+  factory Node.fromJson(Map<String, dynamic> json) => Node(
+        nodeId: (json['nodeId'] ?? '').toString(),
+        nodeType: (json['nodeType'] ?? '').toString(),
+        name: (json['name'] ?? '').toString(),
+        ip: (json['ipAddress'] ?? '').toString(),
+        status: (json['status'] ?? '').toString(),
+        allProperties: json['allProperties'],
+      );
 }
 
-class DeviceListPage extends StatefulWidget {
-  const DeviceListPage({Key? key}) : super(key: key);
+class NodeListPage extends StatefulWidget {
+  const NodeListPage({super.key});
 
   @override
-  State<DeviceListPage> createState() => _DeviceListPageState();
+  State<NodeListPage> createState() => _NodeListPageState();
 }
 
-class _DeviceListPageState extends State<DeviceListPage> {
-  List<Device> devices = [];
-
-  Future<void> fetchDevices() async {
-    final response = await http.post(
-      Uri.parse('https://api-faeezusmani2002-gmailcom-faaezs-projects-373a7c11.vercel.app/graphql'),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({
-        "query": """
-          query {
-            allDevices {
-              name
-              ipAddress
-              macAddress
-            }
-          }
-        """
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      final deviceList = data['data']['allDevices'] as List;
-      setState(() {
-        devices = deviceList.map((d) => Device.fromJson(d)).toList();
-      });
-    } else {
-      throw Exception("Failed to load devices");
-    }
-  }
+class _NodeListPageState extends State<NodeListPage> {
+  List<Node> nodes = [];
+  List<Node> filtered = [];
+  final GraphQLService _service = GraphQLService();
+  final _searchCtrl = TextEditingController();
+  String? errorMessage;
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    fetchDevices();
+    fetchNodes();
+    _searchCtrl.addListener(_applyFilter);
+  }
+
+  @override
+  void dispose() {
+    _searchCtrl.dispose();
+    super.dispose();
+  }
+
+  void _applyFilter() {
+    final q = _searchCtrl.text.toLowerCase();
+    setState(() {
+      filtered = q.isEmpty
+          ? List.from(nodes)
+          : nodes
+              .where((n) =>
+                  n.name.toLowerCase().contains(q) ||
+                  n.nodeType.toLowerCase().contains(q) ||
+                  n.ip.toLowerCase().contains(q) ||
+                  n.status.toLowerCase().contains(q))
+              .toList();
+    });
+  }
+
+  Future<void> fetchNodes() async {
+    if (mounted) setState(() { isLoading = true; errorMessage = null; });
+    try {
+      final list = await _service.fetchNodes();
+      if (!mounted) return;
+      setState(() {
+        nodes    = list.map((n) => Node.fromJson(n)).toList();
+        filtered = List.from(nodes);
+        isLoading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() { errorMessage = e.toString(); isLoading = false; });
+    }
+  }
+
+  IconData _iconForType(String type) {
+    final t = type.toLowerCase();
+    if (t.contains('router'))   return Icons.router_rounded;
+    if (t.contains('switch'))   return Icons.device_hub_rounded;
+    if (t.contains('server'))   return Icons.dns_rounded;
+    if (t.contains('endpoint') || t.contains('device')) return Icons.laptop_rounded;
+    return Icons.devices_other_rounded;
+  }
+
+  Color _colorForType(String type) {
+    final t = type.toLowerCase();
+    if (t.contains('router'))   return AppTheme.statusBlue;
+    if (t.contains('switch'))   return AppTheme.statusPurple;
+    if (t.contains('server'))   return const Color(0xFF0EA5E9);
+    return AppTheme.brandTeal;
   }
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Devices"),
-        backgroundColor: Colors.blueAccent,
-      ),
-      body: devices.isEmpty
-          ? const Center(child: CircularProgressIndicator())
-          : Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // 2 columns
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-            childAspectRatio: 3 / 2, // Width / Height ratio
+        title: const Text('All Devices'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh_rounded),
+            tooltip: 'Refresh',
+            onPressed: fetchNodes,
           ),
-          itemCount: devices.length,
-          itemBuilder: (context, index) {
-            final device = devices[index];
-            return Card(
-              elevation: 5,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+        ],
+      ),
+      body: Column(
+        children: [
+          // Search bar
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+            child: TextField(
+              controller: _searchCtrl,
+              decoration: InputDecoration(
+                hintText: 'Search by name, type, IP or status…',
+                prefixIcon: const Icon(Icons.search_rounded, size: 20),
+                suffixIcon: _searchCtrl.text.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear_rounded, size: 18),
+                        onPressed: () {
+                          _searchCtrl.clear();
+                          _applyFilter();
+                        },
+                      )
+                    : null,
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      device.name,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      "IP: ${device.ip}",
-                      style: const TextStyle(fontSize: 13, color: Colors.grey),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      "MAC: ${device.mac}",
-                      style: const TextStyle(fontSize: 13, color: Colors.grey),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+            ),
+          ),
+
+          // Count chip
+          if (!isLoading && errorMessage == null)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Chip(
+                  label: Text('${filtered.length} device${filtered.length != 1 ? 's' : ''}'),
+                  avatar: Icon(Icons.devices_rounded, size: 14, color: scheme.primary),
                 ),
               ),
-            );
-          },
-        ),
+            ),
+
+          // Content
+          Expanded(
+            child: isLoading
+                ? const LoadingOverlay(label: 'Loading devices…')
+                : errorMessage != null
+                    ? ErrorState(message: errorMessage!, onRetry: fetchNodes)
+                    : filtered.isEmpty
+                        ? EmptyState(
+                            icon: Icons.device_unknown_rounded,
+                            title: _searchCtrl.text.isNotEmpty
+                                ? 'No results for "${_searchCtrl.text}"'
+                                : 'No devices found',
+                            subtitle: 'Pull down to refresh or adjust your search.',
+                            action: _searchCtrl.text.isNotEmpty
+                                ? TextButton(
+                                    onPressed: () {
+                                      _searchCtrl.clear();
+                                      _applyFilter();
+                                    },
+                                    child: const Text('Clear search'),
+                                  )
+                                : null,
+                          )
+                        : RefreshIndicator(
+                            onRefresh: fetchNodes,
+                            child: GridView.builder(
+                              padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 12,
+                                mainAxisSpacing: 12,
+                                childAspectRatio: 0.88,
+                              ),
+                              itemCount: filtered.length,
+                              itemBuilder: (ctx, i) {
+                                final n = filtered[i];
+                                return buildDeviceCard(
+                                  ctx,
+                                  icon: _iconForType(n.nodeType),
+                                  color: _colorForType(n.nodeType),
+                                  title: n.name.isNotEmpty ? n.name : 'Node ${n.nodeId}',
+                                  type: n.nodeType,
+                                  ip: n.ip,
+                                  status: n.status,
+                                );
+                              },
+                            ),
+                          ),
+          ),
+        ],
       ),
     );
   }
