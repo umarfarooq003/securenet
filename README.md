@@ -10,6 +10,7 @@ SecureNet is a cross-platform Flutter application that maps an organization's **
 
 - [Overview](#overview)
 - [Features](#features)
+- [Screenshots](#screenshots)
 - [Architecture](#architecture)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
@@ -37,17 +38,68 @@ The project is built around three core ideas:
 ## Features
 
 - **Authentication** — Sign up, log in, password reset, and change password via Firebase Authentication.
-- **Network graph visualization** — Interactive force-directed and directed graph views of the network topology.
+- **Network dashboard** — At-a-glance counts of routers, switches, servers, endpoints, suspected nodes, and infected nodes.
+- **Network graph visualization** — Interactive force-directed graph of the network topology, with nodes colour-coded by device type.
 - **Risk detection** — Classifies nodes as *Direct Risk*, *Indirect Risk*, or *Safe*, with risk scoring.
 - **Risk-path analysis** — Surfaces multi-hop relationship paths through which a compromise can spread.
-- **Device inventory** — Browse switches, servers, load balancers, and the endpoints connected to each switch.
-- **Next suspected node** — Highlights the most likely next node to be affected.
-- **Infection simulation** — Agent-based simulation of threat propagation with configurable parameters (infection probability, recovery chance, spread chance, outbreak size, resistance chance, etc.).
-- **Charts & analytics** — Visualizes infection, recovery, and resistance trends over simulation steps.
-- **CSV export** — Export network and simulation data.
-- **Settings** — Configure Neo4j connection, discovery, refresh intervals, alerts, backups, and authentication preferences.
+- **Device inventory** — Browse and search switches, servers, load balancers, and the endpoints connected to each switch.
+- **Charts & analytics** — Node distribution and comparison charts (donut and bar charts).
+- **Infection simulation** — Agent-based simulation of threat propagation with configurable parameters (infection probability, recovery chance, virus spread chance, outbreak size, resistance chance, and more).
+- **Simulation analytics** — Live step-by-step stats, infection progression over time, infection by device type, and a final-state breakdown.
+- **CSV export** — Export simulation results.
+- **Settings** — Configure the Neo4j connection, network discovery, refresh intervals, alerts, and backups.
 - **Theming** — Light and dark mode support.
 - **Cross-platform** — Runs on Android, iOS, Web, Windows, macOS, and Linux from a single codebase.
+
+---
+
+## Screenshots
+
+> The screenshots below are stored in the [`screenshots/`](screenshots) folder of this repository.
+
+### Authentication
+
+| Login | Sign Up | Reset Password |
+|-------|---------|----------------|
+| <img src="screenshots/login.jpeg" width="240"> | <img src="screenshots/signup.jpeg" width="240"> | <img src="screenshots/reset-password.jpeg" width="240"> |
+
+### Dashboard & Navigation
+
+| Dashboard | Network Hub | Navigation Drawer |
+|-----------|-------------|-------------------|
+| <img src="screenshots/dashboard.jpeg" width="240"> | <img src="screenshots/network-hub.jpeg" width="240"> | <img src="screenshots/navigation-drawer.jpeg" width="240"> |
+
+### Network Visualization & Devices
+
+| Neo4j Graph | All Devices | Risk Analysis |
+|-------------|-------------|---------------|
+| <img src="screenshots/neo4j-graph.jpeg" width="240"> | <img src="screenshots/all-devices.jpeg" width="240"> | <img src="screenshots/risk-analysis.jpeg" width="240"> |
+
+| Servers | Switches | Settings |
+|---------|----------|----------|
+| <img src="screenshots/servers.jpeg" width="240"> | <img src="screenshots/switches.jpeg" width="240"> | <img src="screenshots/settings.jpeg" width="240"> |
+
+### Analytics
+
+| Network Distribution | Node Count Comparison |
+|----------------------|-----------------------|
+| <img src="screenshots/analytics-distribution.jpeg" width="240"> | <img src="screenshots/analytics-comparison.jpeg" width="240"> |
+
+### Infection Simulator
+
+| Configure Parameters | Simulation Results | Infection Progression |
+|----------------------|--------------------|-----------------------|
+| <img src="screenshots/simulator-config.jpeg" width="240"> | <img src="screenshots/simulator-results.jpeg" width="240"> | <img src="screenshots/simulator-progression.jpeg" width="240"> |
+
+| Final State Distribution | Per-Device Status |
+|--------------------------|-------------------|
+| <img src="screenshots/simulator-final-state.jpeg" width="240"> | <img src="screenshots/simulator-devices.jpeg" width="240"> |
+
+### Messa Simulation — Desktop Interface
+
+The Messa simulation engine also ships with a standalone desktop interface for running and visualizing network infection models.
+
+<img src="screenshots/messa-desktop.jpeg" width="720">
 
 ---
 
@@ -56,28 +108,28 @@ The project is built around three core ideas:
 SecureNet has one frontend and two independent backend services:
 
 ```
-            ┌─────────────────────────────┐
-            │   Flutter App (Detectome)   │
-            │  Android / iOS / Web / etc. │
-            └──────────────┬──────────────┘
-                           │
-            ┌──────────────┴───────────────┐
-            │                              │
-            ▼                              ▼
- ┌─────────────────────┐      ┌──────────────────────────┐
- │  GraphQL Backend     │      │  Messa Simulation API     │
- │  (FastAPI +          │      │  (FastAPI + Mesa)         │
- │   Strawberry GraphQL)│      │                           │
- │                      │      │  Agent-based infection    │
- │  Queries network     │      │  / propagation model      │
- │  topology & risk     │      │                           │
- └──────────┬───────────┘      └──────────────────────────┘
-            │
-            ▼
-   ┌──────────────────┐
-   │   Neo4j (Aura)   │
-   │  Graph Database  │
-   └──────────────────┘
+            +-----------------------------+
+            |   Flutter App (Detectome)   |
+            |  Android / iOS / Web / etc. |
+            +--------------+--------------+
+                           |
+            +--------------+---------------+
+            |                              |
+            v                              v
+ +---------------------+      +--------------------------+
+ |  GraphQL Backend     |      |  Messa Simulation API     |
+ |  (FastAPI +          |      |  (FastAPI + Mesa)         |
+ |   Strawberry GraphQL)|      |                           |
+ |                      |      |  Agent-based infection    |
+ |  Queries network     |      |  / propagation model      |
+ |  topology & risk     |      |                           |
+ +----------+-----------+      +--------------------------+
+            |
+            v
+   +------------------+
+   |   Neo4j (Aura)   |
+   |  Graph Database  |
+   +------------------+
 ```
 
 - **Flutter app** — the user interface, also using Firebase for authentication, storage, and analytics.
@@ -96,11 +148,11 @@ SecureNet has one frontend and two independent backend services:
 - `fl_chart` for analytics, plus `webview_flutter`, `image_picker`, `flutter_local_notifications`
 
 **Backend — GraphQL service**
-- Python · FastAPI · Strawberry GraphQL · Uvicorn
+- Python, FastAPI, Strawberry GraphQL, Uvicorn
 - Neo4j graph database (queried with Cypher)
 
 **Backend — Simulation service**
-- Python · FastAPI · Mesa (agent-based modeling)
+- Python, FastAPI, Mesa (agent-based modeling)
 - NetworkX, pandas, NumPy
 
 **Deployment**
@@ -136,6 +188,7 @@ securenet/
 │   ├── nodes.csv / edges.csv   # Sample network data
 │   └── requirements.txt
 │
+├── screenshots/                # App & simulation screenshots (used in this README)
 ├── assets/                     # Images, icons, HTML
 ├── android/ ios/ web/ ...      # Platform-specific code
 └── pubspec.yaml                # Flutter dependencies
